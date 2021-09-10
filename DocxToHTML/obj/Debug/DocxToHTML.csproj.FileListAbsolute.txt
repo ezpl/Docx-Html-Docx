@@ -50,3 +50,23 @@ D:\Components\Docx-Html-Docx\DocxToHTML\obj\Debug\DocxToHTML.csproj.CoreCompileI
 D:\Components\Docx-Html-Docx\DocxToHTML\obj\Debug\DocxToHTML.csproj.CopyComplete
 D:\Components\Docx-Html-Docx\DocxToHTML\obj\Debug\DocxToHTML.exe
 D:\Components\Docx-Html-Docx\DocxToHTML\obj\Debug\DocxToHTML.pdb
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\bin\Debug\EditorInit.html
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\bin\Debug\DocxToHTML.exe.config
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\bin\Debug\DocxToHTML.exe
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\bin\Debug\DocxToHTML.pdb
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\bin\Debug\DocxToHTML.Converter.dll
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\bin\Debug\HTMLtoDOCX.Converter.dll
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\bin\Debug\DocumentFormat.OpenXml.dll
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\bin\Debug\OpenXmlPowerTools.dll
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\bin\Debug\HtmlToOpenXml.dll
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\bin\Debug\System.IO.Packaging.dll
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\bin\Debug\DocxToHTML.Converter.pdb
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\bin\Debug\HTMLtoDOCX.Converter.pdb
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\obj\Debug\DocxToHTML.csprojAssemblyReference.cache
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\obj\Debug\DocxToHTML.Master.resources
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\obj\Debug\DocxToHTML.Properties.Resources.resources
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\obj\Debug\DocxToHTML.csproj.GenerateResource.cache
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\obj\Debug\DocxToHTML.csproj.CoreCompileInputs.cache
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\obj\Debug\DocxToHTML.csproj.CopyComplete
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\obj\Debug\DocxToHTML.exe
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML\obj\Debug\DocxToHTML.pdb
