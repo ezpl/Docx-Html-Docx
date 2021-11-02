@@ -24,3 +24,13 @@ D:\Components\Docx-Html-Docx\DocxToHTML.Converter\obj\Debug\DocxToHTML.Converter
 D:\Components\Docx-Html-Docx\DocxToHTML.Converter\obj\Debug\DocxToHTML.Converter.csproj.CopyComplete
 D:\Components\Docx-Html-Docx\DocxToHTML.Converter\obj\Debug\DocxToHTML.Converter.dll
 D:\Components\Docx-Html-Docx\DocxToHTML.Converter\obj\Debug\DocxToHTML.Converter.pdb
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML.Converter\bin\Debug\DocxToHTML.Converter.dll
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML.Converter\bin\Debug\DocxToHTML.Converter.pdb
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML.Converter\bin\Debug\DocumentFormat.OpenXml.dll
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML.Converter\bin\Debug\OpenXmlPowerTools.dll
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML.Converter\bin\Debug\System.IO.Packaging.dll
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML.Converter\obj\Debug\DocxToHTML.Converter.csprojAssemblyReference.cache
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML.Converter\obj\Debug\DocxToHTML.Converter.csproj.CoreCompileInputs.cache
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML.Converter\obj\Debug\DocxToHTML.Converter.csproj.CopyComplete
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML.Converter\obj\Debug\DocxToHTML.Converter.dll
+D:\Components\Docx-Html-Docx [ezpl]\DocxToHTML.Converter\obj\Debug\DocxToHTML.Converter.pdb

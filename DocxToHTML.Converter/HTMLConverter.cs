@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using OpenXmlPowerTools;
 using DocumentFormat.OpenXml.Packaging;
@@ -15,7 +16,7 @@ namespace DocxToHTML.Converter
         public string ConvertToHtml(string fullFilePath)
         {
             if (string.IsNullOrEmpty(fullFilePath) || Path.GetExtension(fullFilePath) != ".docx")
-                return "Unsupported format";
+                throw new Exception("Unsupported format - only .docx files can be converted");
 
             FileInfo fileInfo = new FileInfo(fullFilePath);
 
@@ -37,11 +38,35 @@ namespace DocxToHTML.Converter
                 }
             }
 
+            return htmlText;
+        }
+
+
+        public string ConvertToHtml(string title, MemoryStream stream)
+        {
+            if (stream?.Length > 0) throw new System.ArgumentNullException("Provided memory stream is empty");
+
+            string htmlText = string.Empty;
+
+            try
+            {
+                htmlText = ParseDOCX(title, stream);
+            }
+
+            catch (OpenXmlPackageException e)
+            {
+                if (e.ToString().Contains("Invalid Hyperlink"))
+                {
+                    UriFixer.FixInvalidUri(stream, brokenUri => FixUri(brokenUri));
+                    htmlText = ParseDOCX(title, stream);
+                }
+            }
 
             return htmlText;
-
-
         }
+
+
+
 
         private static string FixUri(string brokenUri)
         {
@@ -70,92 +95,91 @@ namespace DocxToHTML.Converter
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
                     memoryStream.Write(byteArray, 0, byteArray.Length);
-
-                    using (WordprocessingDocument wDoc = WordprocessingDocument.Open(memoryStream, true))
-                    {
-
-                        int imageCounter = 0;
-
-                        var pageTitle = fileInfo.FullName;
-                        var part = wDoc.CoreFilePropertiesPart;
-                        if (part != null)
-                            pageTitle = (string)part.GetXDocument().Descendants(DC.title).FirstOrDefault() ?? fileInfo.FullName;
-
-                        WmlToHtmlConverterSettings settings = new WmlToHtmlConverterSettings()
-                        {
-                            AdditionalCss = "body { margin: 1cm auto; max-width: 20cm; padding: 0; }",
-                            PageTitle = pageTitle,
-                            FabricateCssClasses = true,
-                            CssClassPrefix = "pt-",
-                            RestrictToSupportedLanguages = false,
-                            RestrictToSupportedNumberingFormats = false,
-                            ImageHandler = imageInfo =>
-                            {
-                                ++imageCounter;
-                                string extension = imageInfo.ContentType.Split('/')[1].ToLower();
-                                ImageFormat imageFormat = null;
-                                if (extension == "png") imageFormat = ImageFormat.Png;
-                                else if (extension == "gif") imageFormat = ImageFormat.Gif;
-                                else if (extension == "bmp") imageFormat = ImageFormat.Bmp;
-                                else if (extension == "jpeg") imageFormat = ImageFormat.Jpeg;
-                                else if (extension == "tiff")
-                                {
-                                    extension = "gif";
-                                    imageFormat = ImageFormat.Gif;
-                                }
-                                else if (extension == "x-wmf")
-                                {
-                                    extension = "wmf";
-                                    imageFormat = ImageFormat.Wmf;
-                                }
-
-                                if (imageFormat == null)
-                                    return null;
-
-                                string base64 = null;
-                                try
-                                {
-                                    using (MemoryStream ms = new MemoryStream())
-                                    {
-                                        imageInfo.Bitmap.Save(ms, imageFormat);
-                                        var ba = ms.ToArray();
-                                        base64 = System.Convert.ToBase64String(ba);
-                                    }
-                                }
-                                catch (System.Runtime.InteropServices.ExternalException)
-                                { return null; }
-
-
-                                ImageFormat format = imageInfo.Bitmap.RawFormat;
-                                ImageCodecInfo codec = ImageCodecInfo.GetImageDecoders().First(c => c.FormatID == format.Guid);
-                                string mimeType = codec.MimeType;
-
-                                string imageSource = string.Format("data:{0};base64,{1}", mimeType, base64);
-
-                                XElement img = new XElement(Xhtml.img,
-                                    new XAttribute(NoNamespace.src, imageSource),
-                                    imageInfo.ImgStyleAttribute,
-                                    imageInfo.AltText != null ?
-                                        new XAttribute(NoNamespace.alt, imageInfo.AltText) : null);
-                                return img;
-                            }
-                        };
-
-                        XElement htmlElement = WmlToHtmlConverter.ConvertToHtml(wDoc, settings);
-
-                        var html = new XDocument(new XDocumentType("html", null, null, null), htmlElement);
-                        var htmlString = html.ToString(SaveOptions.DisableFormatting);
-                        return htmlString;
-                    }
+                    return ParseDOCX(fileInfo.FullName, memoryStream);
                 }
             }
-            catch
-            {
-                return "File contains corrupt data";
-            }
-
+            catch (Exception e) { throw new Exception("File contains corrupt data", e); }
         }
 
 
+        private static string ParseDOCX(string title, MemoryStream memoryStream)
+        {
+            using (WordprocessingDocument wDoc = WordprocessingDocument.Open(memoryStream, true))
+            {
+
+                int imageCounter = 0;
+
+                var pageTitle = title;
+                var part = wDoc.CoreFilePropertiesPart;
+                if (part != null)
+                    pageTitle = (string)part.GetXDocument().Descendants(DC.title).FirstOrDefault() ?? title;
+
+                WmlToHtmlConverterSettings settings = new WmlToHtmlConverterSettings()
+                {
+                    AdditionalCss = "body { margin: 1cm auto; max-width: 20cm; padding: 0; }",
+                    PageTitle = pageTitle,
+                    FabricateCssClasses = true,
+                    CssClassPrefix = "pt-",
+                    RestrictToSupportedLanguages = false,
+                    RestrictToSupportedNumberingFormats = false,
+                    ImageHandler = imageInfo =>
+                    {
+                        ++imageCounter;
+                        string extension = imageInfo.ContentType.Split('/')[1].ToLower();
+                        ImageFormat imageFormat = null;
+                        if (extension == "png") imageFormat = ImageFormat.Png;
+                        else if (extension == "gif") imageFormat = ImageFormat.Gif;
+                        else if (extension == "bmp") imageFormat = ImageFormat.Bmp;
+                        else if (extension == "jpeg") imageFormat = ImageFormat.Jpeg;
+                        else if (extension == "tiff")
+                        {
+                            extension = "gif";
+                            imageFormat = ImageFormat.Gif;
+                        }
+                        else if (extension == "x-wmf")
+                        {
+                            extension = "wmf";
+                            imageFormat = ImageFormat.Wmf;
+                        }
+
+                        if (imageFormat == null)
+                            return null;
+
+                        string base64 = null;
+                        try
+                        {
+                            using (MemoryStream ms = new MemoryStream())
+                            {
+                                imageInfo.Bitmap.Save(ms, imageFormat);
+                                var ba = ms.ToArray();
+                                base64 = System.Convert.ToBase64String(ba);
+                            }
+                        }
+                        catch (System.Runtime.InteropServices.ExternalException)
+                        { return null; }
+
+
+                        ImageFormat format = imageInfo.Bitmap.RawFormat;
+                        ImageCodecInfo codec = ImageCodecInfo.GetImageDecoders().First(c => c.FormatID == format.Guid);
+                        string mimeType = codec.MimeType;
+
+                        string imageSource = string.Format("data:{0};base64,{1}", mimeType, base64);
+
+                        XElement img = new XElement(Xhtml.img,
+                            new XAttribute(NoNamespace.src, imageSource),
+                            imageInfo.ImgStyleAttribute,
+                            imageInfo.AltText != null ?
+                                new XAttribute(NoNamespace.alt, imageInfo.AltText) : null);
+                        return img;
+                    }
+                };
+
+                XElement htmlElement = WmlToHtmlConverter.ConvertToHtml(wDoc, settings);
+
+                var html = new XDocument(new XDocumentType("html", null, null, null), htmlElement);
+                var htmlString = html.ToString(SaveOptions.DisableFormatting);
+                return htmlString;
+            }
+        }
     }
 }
